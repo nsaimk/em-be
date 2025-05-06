@@ -20,6 +20,6 @@ jobs:
           ssh -o StrictHostKeyChecking=no ec2-user@18.203.81.35 << 'EOF'
             cd /home/ec2-user/em-be
             git pull origin main
-            pkill -f 'spring-boot:run' || true
+            pkill -f './mvnw spring-boot:run' || true
             nohup ./mvnw spring-boot:run -Dspring-boot.run.arguments=--server.address=0.0.0.0 > app.log 2>&1 &
           EOF
