@@ -3,22 +3,23 @@ name: Deploy to EC2
 on:
   push:
     branches:
-      - main 
+      - main  # or your desired branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Deploy to EC2
-        run: ssh -o StrictHostKeyChecking=no ec2-user@18.203.81.35 'cd /home/ec2-user/em-be && git pull && sudo systemctl restart myapp'
-        env:
-          PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-
       - name: Add SSH key
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+      - name: Deploy Spring Boot app to EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no ec2-user@18.203.81.35 << 'EOF'
+            cd /home/ec2-user/em-be
+            git pull origin main
+            pkill -f 'spring-boot:run' || true
+            nohup ./mvnw spring-boot:run -Dspring-boot.run.arguments=--server.address=0.0.0.0 > app.log 2>&1 &
+          EOF
