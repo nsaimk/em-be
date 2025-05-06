@@ -8,7 +8,7 @@ public class PingController {
 
     @GetMapping("/")
     public String root() {
-        return "Welcome to EM backend API!";
+        return "Welcome to EM backend API! Java nsaimk";
     }
 
     @GetMapping("/api/ping")
