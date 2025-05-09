@@ -1,4 +1,4 @@
-name: Deploy to EC2
+name: Deploy Backend to EC2
 
 on:
   push:
@@ -14,8 +14,7 @@ jobs:
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
-
-      - name: Deploy Spring Boot app to EC2
+      - name: Deploy app to EC2
         run: |
           ssh -o StrictHostKeyChecking=no ec2-user@18.203.81.35 << 'EOF'
             cd /home/ec2-user/em-be
